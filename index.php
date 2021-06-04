@@ -202,7 +202,8 @@ function getContent($url, $geturl = false)
 			//echo "$resp";
 			$check = explode('"downloadAddr":"', $resp);
 			if (count($check) > 1){
-				$contentURL = explode("\"",$check[1])[0];
+				$datafile = "user_videos/" . generateRandomString() . ".mp4";
+                $contentURL = explode("\"",$check[1])[0];
                 $contentURL = str_replace("\\u0026", "&", $contentURL);
 				$thumb = explode("\"",explode('og:image" content="', $resp)[1])[0];
 				$username = explode('/',explode('"$pageUrl":"/@', $resp)[1])[0];
@@ -211,7 +212,7 @@ function getContent($url, $geturl = false)
 				$create_time = $dt->format("d M Y H:i:s A");
 				$videoKey = getKey($contentURL);
 				$cleanVideo = "https://api2-16-h2.musical.ly/aweme/v1/play/?video_id=$videoKey&vr_type=0&is_play_url=1&source=PackSourceEnum_PUBLISH&media_type=4";
-				$cleanVideo = getContent($cleanVideo, false);
+				$cleanVideo = getContent($cleanVideo, true);
 				if (!file_exists("user_videos") && $store_locally){
 					mkdir("user_videos");
 				}
@@ -245,6 +246,7 @@ function getContent($url, $geturl = false)
 			<div class="col-sm-6 col-md-6 col-lg-6 text-center mt-5"><ul style="list-style: none;padding: 0px">
 				<li>a video by <b>@<?php echo $username; ?></b></li>
 				<li>uploaded on <b><?php echo $create_time; ?></b></li>
+				<li>name file <b><?php echo $datafile; ?></b></li>
 				<li><button id="wmarked_link" disabled="disabled" class="btn btn-primary mt-3" onclick="window.location.href='<?php if ($store_locally){ echo $filename;} else { echo $contentURL; } ?>'">Download Video</button> <button class="btn btn-info mt-3" onclick="window.location.href='<?php echo $cleanVideo; ?>'">Download Watermark Free!</button></li>
 				<li><div class="alert alert-primary mb-0 mt-3">If the video opens directly, try saving it by pressing CTRL+S or on phone, save from three dots in the bottom left corner</div></li>
 			</ul></div>
